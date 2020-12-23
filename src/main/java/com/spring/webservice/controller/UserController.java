@@ -1,6 +1,7 @@
 package com.spring.webservice.controller;
 
 import com.spring.webservice.model.UserRest;
+import com.spring.webservice.model.request.UpdateUserDetailsRequest;
 import com.spring.webservice.model.request.UserDetailsRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -59,6 +60,30 @@ public class UserController {
             users = new HashMap<>();
         }
         users.put(userId, user);
-        return new ResponseEntity<UserRest>(user, HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/{userId}",
+            consumes = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE},
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<UserRest> updateUser(@PathVariable String userId,
+                                               @Valid @RequestBody UpdateUserDetailsRequest userDetails){
+        UserRest storedUserDetails = users.get(userId);
+        storedUserDetails.setFirstName(userDetails.getFirstName());
+        storedUserDetails.setLastName(userDetails.getLastName());
+        users.put(userId, storedUserDetails);
+
+
+        return new ResponseEntity<UserRest>(storedUserDetails, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String userId){
+        users.remove(userId);
+        return ResponseEntity.noContent().build();
     }
 }
