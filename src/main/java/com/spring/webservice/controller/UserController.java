@@ -1,6 +1,6 @@
 package com.spring.webservice.controller;
 
-import com.spring.webservice.model.UserRest;
+import com.spring.webservice.model.response.UserRest;
 import com.spring.webservice.model.request.UpdateUserDetailsRequest;
 import com.spring.webservice.model.request.UserDetailsRequest;
 import org.springframework.http.HttpStatus;

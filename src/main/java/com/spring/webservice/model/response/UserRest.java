@@ -1,4 +1,4 @@
-package com.spring.webservice.model;
+package com.spring.webservice.model.response;
 
 /*
  *Created by olga on 22.12.2020
