@@ -9,9 +9,11 @@ import javax.validation.constraints.Size;
  */
 public class UserDetailsRequest {
     @NotNull(message = "firstName can't be null")
+    @Size(min = 2, message = "FirstName must be equal or more than 2 characters")
     private String firstName;
 
     @NotNull(message = "lastName can't be null")
+    @Size(min = 2, message = "LastName must be equal or more than 2 characters")
     private String lastName;
 
     @NotNull(message = "email can't be null")
