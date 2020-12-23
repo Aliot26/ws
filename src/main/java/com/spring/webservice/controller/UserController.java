@@ -1,7 +1,10 @@
 package com.spring.webservice.controller;
 
 import com.spring.webservice.model.UserRest;
+import com.spring.webservice.model.request.UserDetailsRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /*
@@ -20,7 +23,7 @@ public class UserController {
     @GetMapping(value = "/{userId}", produces = {
             MediaType.APPLICATION_XML_VALUE,
             MediaType.APPLICATION_JSON_VALUE})
-    public UserRest getUser(@PathVariable String userId) {
+    public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
         UserRest user = new UserRest();
         user.setFirstName("Ivan");
         user.setLastName("Petroff");
@@ -29,6 +32,12 @@ public class UserController {
         System.out.println(user);
         System.out.println(user.getEmail());
         System.out.println(user.getUserId());
-        return user;
+        return new ResponseEntity<UserRest>(user, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public String createUser(@RequestBody UserDetailsRequest userDetails){
+
+        return "user is created";
     }
 }
