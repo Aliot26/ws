@@ -4,6 +4,8 @@ import com.spring.webservice.exception.UserServiceException;
 import com.spring.webservice.model.response.UserRest;
 import com.spring.webservice.model.request.UpdateUserDetailsRequest;
 import com.spring.webservice.model.request.UserDetailsRequest;
+import com.spring.webservice.sevice.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,12 @@ import java.util.UUID;
 public class UserController {
 
     Map<String, UserRest> users;
+
+    UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public String getUsers(@RequestParam(value = "page", defaultValue = "1") int page,
@@ -55,17 +63,8 @@ public class UserController {
                     MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequest userDetails) {
 
-        UserRest user = new UserRest();
-        user.setFirstName(userDetails.getFirstName());
-        user.setLastName(userDetails.getLastName());
-        user.setEmail(userDetails.getEmail());
+        UserRest user = userService.createUser(userDetails);
 
-        String userId = UUID.randomUUID().toString();
-        user.setUserId(userId);
-        if (users == null) {
-            users = new HashMap<>();
-        }
-        users.put(userId, user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
