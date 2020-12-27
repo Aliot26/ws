@@ -1,5 +1,6 @@
 package com.spring.webservice.controller;
 
+import com.spring.webservice.exception.UserServiceException;
 import com.spring.webservice.model.response.UserRest;
 import com.spring.webservice.model.request.UpdateUserDetailsRequest;
 import com.spring.webservice.model.request.UserDetailsRequest;
@@ -33,6 +34,11 @@ public class UserController {
             MediaType.APPLICATION_XML_VALUE,
             MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
+
+//        if(true){
+//            throw new UserServiceException("UserServiceException is thrown");
+//        }
+
         if (users.containsKey(userId)) {
             return new ResponseEntity<>(users.get(userId), HttpStatus.OK);
         } else {

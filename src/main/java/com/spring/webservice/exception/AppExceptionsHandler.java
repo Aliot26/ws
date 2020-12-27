@@ -17,6 +17,7 @@ import java.util.Date;
  */
 @ControllerAdvice
 public class AppExceptionsHandler extends ResponseEntityExceptionHandler {
+
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Object> handleAnyException(Exception ex, WebRequest request) {
         String errMessageDescription = ex.getLocalizedMessage();
@@ -31,4 +32,20 @@ public class AppExceptionsHandler extends ResponseEntityExceptionHandler {
                 errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR
         );
     }
+
+    @ExceptionHandler(value = {NullPointerException.class, UserServiceException.class})
+    public ResponseEntity<Object> handleSpecificException(Exception ex, WebRequest request) {
+        String errMessageDescription = ex.getLocalizedMessage();
+
+        if(errMessageDescription == null){
+            errMessageDescription = ex.toString();
+        }
+
+        ErrorMessage errorMessage = new ErrorMessage(new Date(), errMessageDescription);
+
+        return new ResponseEntity<>(
+                errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
 }
