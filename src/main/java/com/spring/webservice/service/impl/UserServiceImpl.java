@@ -1,15 +1,15 @@
-package com.spring.webservice.sevice.impl;
+package com.spring.webservice.service.impl;
 
+import com.spring.webservice.model.request.UpdateUserDetailsRequest;
 import com.spring.webservice.model.request.UserDetailsRequest;
 import com.spring.webservice.model.response.UserRest;
-import com.spring.webservice.sevice.UserService;
+import com.spring.webservice.service.UserService;
 import com.spring.webservice.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /*
  *Created by olga on 27.12.2020
@@ -40,5 +40,27 @@ public class UserServiceImpl implements UserService {
         }
         users.put(userId, user);
         return user;
+    }
+
+    @Override
+    public UserRest getUser(String userId) {
+        if(users.containsKey(userId)){
+            return users.get(userId);
+        }
+        return null;
+    }
+
+    @Override
+    public UserRest updateUser(String userId, UpdateUserDetailsRequest userDetails) {
+        UserRest storedUser = users.get(userId);
+        storedUser.setFirstName(userDetails.getFirstName());
+        storedUser.setLastName(userDetails.getLastName());
+        users.put(userId, storedUser);
+        return storedUser;
+    }
+
+    @Override
+    public void deleteUser(String userId) {
+        users.remove(userId);
     }
 }

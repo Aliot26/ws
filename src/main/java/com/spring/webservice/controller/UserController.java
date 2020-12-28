@@ -1,20 +1,16 @@
 package com.spring.webservice.controller;
 
-import com.spring.webservice.exception.UserServiceException;
 import com.spring.webservice.model.response.UserRest;
 import com.spring.webservice.model.request.UpdateUserDetailsRequest;
 import com.spring.webservice.model.request.UserDetailsRequest;
-import com.spring.webservice.sevice.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.spring.webservice.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /*
  *Created by olga on 22.12.2020
@@ -46,9 +42,9 @@ public class UserController {
 //        if(true){
 //            throw new UserServiceException("UserServiceException is thrown");
 //        }
-
-        if (users.containsKey(userId)) {
-            return new ResponseEntity<>(users.get(userId), HttpStatus.OK);
+        UserRest user = userService.getUser(userId);
+        if ( user!= null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -76,19 +72,16 @@ public class UserController {
                     MediaType.APPLICATION_XML_VALUE,
                     MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserRest> updateUser(@PathVariable String userId,
-                                               @Valid @RequestBody UpdateUserDetailsRequest userDetails){
-        UserRest storedUserDetails = users.get(userId);
-        storedUserDetails.setFirstName(userDetails.getFirstName());
-        storedUserDetails.setLastName(userDetails.getLastName());
-        users.put(userId, storedUserDetails);
+                                               @Valid @RequestBody UpdateUserDetailsRequest userDetails) {
 
+        UserRest storedUserDetails = userService.updateUser(userId, userDetails);
 
         return new ResponseEntity<UserRest>(storedUserDetails, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String userId){
-        users.remove(userId);
+    public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
+        userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
 }
